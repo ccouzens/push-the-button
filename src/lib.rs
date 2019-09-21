@@ -14,6 +14,7 @@ const SIZE: usize = 10;
 #[wasm_bindgen]
 #[derive(Default)]
 pub struct Game {
+    mapping: [u8; SIZE],
     leds: [bool; SIZE],
 }
 
@@ -89,5 +90,9 @@ impl Game {
 
     pub fn leds(&self) -> *const bool {
         self.leds.as_ptr()
+    }
+
+    pub fn mapping(&self) -> *const u8 {
+        self.mapping.as_ptr()
     }
 }
