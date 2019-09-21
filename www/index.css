@@ -1,0 +1,13 @@
+button {
+    --size: 5em;
+    background-color: darkgreen;
+    color: white;
+    min-width: var(--size);
+    min-height: var(--size);
+    border-radius: calc(var(--size)/2);
+}
+
+button.on {
+    background-color: lightgreen;
+    color: black;
+}
