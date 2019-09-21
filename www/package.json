@@ -8,7 +8,10 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "prettier:base": "prettier",
+    "prettier:check": "npm run prettier:base -- --list-different index.*",
+    "prettier:write": "npm run prettier:base -- --write index.*"
   },
   "repository": {
     "type": "git",
@@ -30,10 +33,11 @@
     "crystal-maze": "file:../pkg"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^5.0.0",
     "hello-wasm-pack": "^0.1.0",
+    "prettier": "^1.18.2",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5",
-    "copy-webpack-plugin": "^5.0.0"
+    "webpack-dev-server": "^3.1.5"
   }
 }

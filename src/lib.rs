@@ -8,12 +8,31 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+const SIZE: usize = 10;
+
 #[wasm_bindgen]
-extern {
-    fn alert(s: &str);
+#[derive(Default)]
+pub struct Game {
+    leds: [bool; SIZE],
 }
 
 #[wasm_bindgen]
-pub fn greet(name: &str) {
-    alert(&format!("Hello, {}!", name));
+impl Game {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn size(&self) -> usize {
+        self.leds.len()
+    }
+
+    pub fn button_down(&mut self, button: u8) {
+        for (led, i) in self.leds.iter_mut().zip(0..) {
+            *led = button >= i;
+        }
+    }
+
+    pub fn leds(&self) -> *const bool {
+        self.leds.as_ptr()
+    }
 }
