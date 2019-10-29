@@ -1,0 +1,27 @@
+#leds button {
+  --size: 5em;
+  background-color: darkgreen;
+  color: white;
+  min-width: var(--size);
+  min-height: var(--size);
+  border-radius: calc(var(--size) / 2);
+}
+
+#leds button.on {
+  background-color: lightgreen;
+  color: black;
+}
+
+img {
+  width: 100%;
+}
+
+#mapping {
+  white-space: pre-line;
+  opacity: 0;
+  transition: opacity 2s ease-in-out 0.5s;
+}
+
+#mapping:hover {
+  opacity: 1;
+}
