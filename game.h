@@ -1,4 +1,4 @@
-#include <stdint.h>;
+#include <stdint.h>
 
 #define PUSH_THE_BUTTON_SIZE 10
 

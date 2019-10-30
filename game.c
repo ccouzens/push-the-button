@@ -6,6 +6,17 @@ struct push_the_button_game push_the_button_new() {
   return game;
 }
 
+static void toggle_by_distance(struct push_the_button_game *game,
+                               uint8_t button, uint8_t distance) {
+  uint8_t up = (button + distance) % PUSH_THE_BUTTON_SIZE;
+  uint8_t down =
+      (button + PUSH_THE_BUTTON_SIZE - distance) % PUSH_THE_BUTTON_SIZE;
+  game->leds[up] = !game->leds[up];
+  if (up != down) {
+    game->leds[down] = !game->leds[down];
+  }
+}
+
 void push_the_button(struct push_the_button_game *game, uint8_t button) {
   switch (button) {
   case 0:
@@ -52,17 +63,6 @@ void push_the_button(struct push_the_button_game *game, uint8_t button) {
   case 9:
     toggle_by_distance(game, button, 3);
     break;
-  }
-}
-
-static void toggle_by_distance(struct push_the_button_game *game,
-                               uint8_t button, uint8_t distance) {
-  uint8_t up = (button + distance) % PUSH_THE_BUTTON_SIZE;
-  uint8_t down =
-      (button + PUSH_THE_BUTTON_SIZE - distance) % PUSH_THE_BUTTON_SIZE;
-  game->leds[up] = !game->leds[up];
-  if (up != down) {
-    game->leds[down] = !game->leds[down];
   }
 }
 
