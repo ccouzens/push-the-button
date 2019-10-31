@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Button Game</title>
+    <style type="text/css">
+      #leds button {
+        --size: 5em;
+        background-color: darkgreen;
+        color: white;
+        min-width: var(--size);
+        min-height: var(--size);
+        border-radius: calc(var(--size) / 2);
+      }
+
+      #leds button.on {
+        background-color: lightgreen;
+        color: black;
+      }
+    </style>
+    <script src="a.out.js"></script>
+  </head>
+  <body>
+    <div id="leds">
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button>10</button>
+    </div>
+    <button id="reset">⚠️ Reset</button>
+
+    <script>
+      const SIZE = 10;
+
+      Module.onRuntimeInitialized = _ => {
+        const cApi = {
+          new: Module.cwrap("new", "number", []),
+          leds: Module.cwrap("leds", "number", ["number"]),
+          push: Module.cwrap("push", null, ["number", "number"]),
+          reset: Module.cwrap("reset", null, ["number"])
+        };
+
+        class Game {
+          constructor() {
+            this.game = cApi.new();
+          }
+
+          get leds() {
+            const ledsPointer = cApi.leds(this.game);
+            return Module.HEAPU8.subarray(ledsPointer, ledsPointer + SIZE);
+          }
+
+          push(button) {
+            cApi.push(this.game, button);
+          }
+
+          reset() {
+            cApi.reset(this.game);
+          }
+        }
+
+        const game = new Game();
+        const leds = game.leds;
+
+        const buttonElements = document
+          .getElementById("leds")
+          .getElementsByTagName("button");
+
+        const setLeds = () => {
+          leds.forEach((on, i) => {
+            buttonElements[i].classList.toggle("on", on !== 0);
+          });
+        };
+
+        for (let i = 0; i < SIZE; i++) {
+          const buttonElement = buttonElements[i];
+          buttonElement.addEventListener("click", () => {
+            game.push(i);
+            setLeds();
+          });
+        }
+        document.getElementById("reset").addEventListener("click", () => {
+          game.reset();
+          setLeds();
+        });
+      };
+    </script>
+  </body>
+</html>
