@@ -38,12 +38,26 @@
     <script>
       const SIZE = 10;
 
+      const ACTIONS = [
+        "All off",
+        "All but self toggle",
+        "Toggle self",
+        "On evens",
+        "Off evens",
+        "On odds",
+        "Off odds",
+        "Toggle ±1",
+        "Toggle ±2",
+        "Toggle ±3"
+      ];
+
       Module.onRuntimeInitialized = _ => {
         const cApi = {
           new: Module.cwrap("new", "number", []),
           leds: Module.cwrap("leds", "number", ["number"]),
           push: Module.cwrap("push", null, ["number", "number"]),
-          reset: Module.cwrap("reset", null, ["number"])
+          reset: Module.cwrap("reset", null, ["number"]),
+          mappings: Module.cwrap("mappings", "number", ["number"])
         };
 
         class Game {
@@ -52,8 +66,13 @@
           }
 
           get leds() {
-            const ledsPointer = cApi.leds(this.game);
-            return Module.HEAPU8.subarray(ledsPointer, ledsPointer + SIZE);
+            const pointer = cApi.leds(this.game);
+            return Module.HEAPU8.subarray(pointer, pointer + SIZE);
+          }
+
+          get mappings() {
+            const pointer = cApi.mappings(this.game);
+            return Module.HEAPU8.subarray(pointer, pointer + SIZE);
           }
 
           push(button) {
@@ -67,10 +86,17 @@
 
         const game = new Game();
         const leds = game.leds;
+        const mappings = game.mappings;
 
         const buttonElements = document
           .getElementById("leds")
           .getElementsByTagName("button");
+
+        const logActions = () => {
+          console.log([...mappings].map(i => ACTIONS[i]));
+        };
+
+        logActions();
 
         const setLeds = () => {
           leds.forEach((on, i) => {
@@ -88,6 +114,7 @@
         document.getElementById("reset").addEventListener("click", () => {
           game.reset();
           setLeds();
+          logActions();
         });
       };
     </script>
