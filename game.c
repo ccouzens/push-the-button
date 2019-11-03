@@ -1,7 +1,8 @@
 #include "game.h"
 
-struct push_the_button_game push_the_button_new() {
+struct push_the_button_game push_the_button_new(long (*random)(long)) {
   struct push_the_button_game game;
+  game.random = random;
   for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i++) {
     game.leds[i] = 0;
     game.mappings[i] = i;
@@ -77,7 +78,7 @@ void push_the_button_reset(struct push_the_button_game *game) {
 
   for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i++) {
     int currentMapping = game->mappings[i];
-    int randomSwap = push_the_button_random(PUSH_THE_BUTTON_SIZE - i) + i;
+    int randomSwap = game->random(PUSH_THE_BUTTON_SIZE - i) + i;
     game->mappings[i] = game->mappings[randomSwap];
     game->mappings[randomSwap] = currentMapping;
   }

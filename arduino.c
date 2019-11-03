@@ -7,11 +7,9 @@ uint8_t RESET_PIN = 3;
 int last_reset_state = LOW;
 struct push_the_button_game game;
 
-long push_the_button_random(long max) { return random(max); }
-
 void setup() {
   pinMode(RESET_PIN, INPUT);
-  game = push_the_button_new();
+  game = push_the_button_new(&random);
 }
 
 void loop() {
