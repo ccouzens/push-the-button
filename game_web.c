@@ -1,4 +1,4 @@
-#include "game.h"
+#include "game/game.h"
 #include <emscripten.h>
 #include <stdlib.h>
 
