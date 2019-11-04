@@ -1,7 +1,12 @@
 #include "game.h"
 
-struct push_the_button_game push_the_button_new() {
+struct push_the_button_game push_the_button_new(long (*random)(long)) {
   struct push_the_button_game game;
+  game.random = random;
+  for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i++) {
+    game.leds[i] = 0;
+    game.mappings[i] = i;
+  }
   push_the_button_reset(&game);
   return game;
 }
@@ -18,7 +23,7 @@ static void toggle_by_distance(struct push_the_button_game *game,
 }
 
 void push_the_button(struct push_the_button_game *game, uint8_t button) {
-  switch (button) {
+  switch (game->mappings[button]) {
   case 0:
     for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i++) {
       game->leds[i] = 0;
@@ -35,22 +40,22 @@ void push_the_button(struct push_the_button_game *game, uint8_t button) {
     toggle_by_distance(game, button, 0);
     break;
   case 3:
-    for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i += 2) {
+    for (int i = 1; i < PUSH_THE_BUTTON_SIZE; i += 2) {
       game->leds[i] = 1;
     };
     break;
   case 4:
-    for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i += 2) {
+    for (int i = 1; i < PUSH_THE_BUTTON_SIZE; i += 2) {
       game->leds[i] = 0;
     };
     break;
   case 5:
-    for (int i = 1; i < PUSH_THE_BUTTON_SIZE; i += 2) {
+    for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i += 2) {
       game->leds[i] = 1;
     };
     break;
   case 6:
-    for (int i = 1; i < PUSH_THE_BUTTON_SIZE; i += 2) {
+    for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i += 2) {
       game->leds[i] = 0;
     };
     break;
@@ -70,4 +75,11 @@ void push_the_button_reset(struct push_the_button_game *game) {
   for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i++) {
     game->leds[i] = 0;
   };
+
+  for (int i = 0; i < PUSH_THE_BUTTON_SIZE; i++) {
+    int currentMapping = game->mappings[i];
+    int randomSwap = game->random(PUSH_THE_BUTTON_SIZE - i) + i;
+    game->mappings[i] = game->mappings[randomSwap];
+    game->mappings[randomSwap] = currentMapping;
+  }
 }
