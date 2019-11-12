@@ -15,12 +15,21 @@ void setup() {
 void loop() {
   for (int i = 0; i < sizeof(BUTTON_PINS); i++) {
     pinMode(BUTTON_PINS[i], INPUT);
+  }
+  delay(1);
+  for (int i = 0; i < sizeof(BUTTON_PINS); i++) {
     int buttonState = digitalRead(BUTTON_PINS[i]);
     if (buttonState == HIGH && last_button_states[i] == LOW) {
       push_the_button(&game, i);
     }
     last_button_states[i] = buttonState;
+  }
+
+  for (int i = 0; i < sizeof(BUTTON_PINS); i++) {
     pinMode(BUTTON_PINS[i], OUTPUT);
+  }
+
+  for (int i = 0; i < sizeof(BUTTON_PINS); i++) {
     digitalWrite(BUTTON_PINS[i], game.leds[i] == 0 ? LOW : HIGH);
   }
 
