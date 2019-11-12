@@ -1,6 +1,6 @@
 #include "game.c"
 
-uint8_t BUTTON_PINS[] = {13, 12, 11, 10, 9, 8, 7, 6, 5, 4};
+uint8_t BUTTON_PINS[] = {22, 26, 30, 34, 38, 42, 46, 50, 52, 53};
 int last_button_states[] = {LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW};
 
 uint8_t RESET_PIN = 3;
